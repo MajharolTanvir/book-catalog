@@ -14,7 +14,17 @@ const allUser = async () => {
   return result;
 };
 
+const singleUser = async (id: string) => {
+    const result = await prisma.user.findUnique({
+        where: {
+          id
+      }
+  });
+  return result;
+};
+
 export const UserService = {
   createUser,
   allUser,
+  singleUser,
 };

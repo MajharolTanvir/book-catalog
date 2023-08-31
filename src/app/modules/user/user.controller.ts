@@ -32,7 +32,21 @@ const allUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 
+
+const singleUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.singleUser(req.params.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User retrieved successful',
+    data: result,
+  });
+});
+
+
 export const UserController = {
   createUser,
   allUser,
+  singleUser,
 };
