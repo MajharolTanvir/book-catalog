@@ -20,12 +20,18 @@ model User {
   address    String
   profileImg String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@map("users")
 }
 
 model Category {
   id    String @id @default(uuid())
   title String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("categories")
 }
@@ -39,6 +45,9 @@ model Book {
   publicationDate DateTime
   categoryId      String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@map("books")
 }
 
@@ -49,7 +58,26 @@ model Review {
   userId String
   bookId String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@map("reviews")
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  userId    String
+  status    OrderStatus @default(pending)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  pending
+  shipped
+  delivered
 }
 
 enum UserRole {
