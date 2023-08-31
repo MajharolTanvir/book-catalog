@@ -42,6 +42,16 @@ model Book {
   @@map("books")
 }
 
+model Review {
+  id     String @id @default(uuid())
+  review String
+  rating String
+  userId String
+  bookId String
+
+  @@map("reviews")
+}
+
 enum UserRole {
   admin
   customer
