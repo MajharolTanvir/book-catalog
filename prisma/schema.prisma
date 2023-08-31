@@ -30,6 +30,18 @@ model Category {
   @@map("categories")
 }
 
+model Book {
+  id              String   @id @default(uuid())
+  title           String
+  author          String
+  price           Float
+  genre           String
+  publicationDate DateTime
+  categoryId      String
+
+  @@map("books")
+}
+
 enum UserRole {
   admin
   customer
