@@ -9,8 +9,12 @@ const createUser = async (payload: User) => {
   return result;
 };
 
-
+const allUser = async () => {
+  const result = await prisma.user.findMany({});
+  return result;
+};
 
 export const UserService = {
-    createUser
-}
+  createUser,
+  allUser,
+};
