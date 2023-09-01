@@ -14,7 +14,7 @@ const createOrder = async (payload: OrderedBook[], id: string) => {
         orderId: order.id,
         bookId: payload[i].bookId,
         quantity: payload[i].quantity,
-      }
+      },
     });
   }
 
@@ -30,6 +30,13 @@ const createOrder = async (payload: OrderedBook[], id: string) => {
   return result;
 };
 
+const allOrders = async () => {
+  const result = await prisma.order.findMany({});
+
+  return result;
+};
+
 export const OrderService = {
   createOrder,
+  allOrders,
 };

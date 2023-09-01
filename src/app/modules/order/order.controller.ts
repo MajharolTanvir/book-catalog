@@ -27,7 +27,7 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
         'Admins cannot create orders. Please login as a customer account.',
       );
     }
-      const { orderedBooks } = req.body;
+    const { orderedBooks } = req.body;
 
     const result = await OrderService.createOrder(
       orderedBooks,
@@ -45,6 +45,18 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
   }
 });
 
+const allOrder = catchAsync(async (req: Request, res: Response) => {
+  const result = await OrderService.allOrders();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Order retrieved successfully',
+    data: result,
+  });
+});
+
 export const OrderController = {
   createOrder,
+  allOrder,
 };
