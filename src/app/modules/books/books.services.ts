@@ -83,6 +83,16 @@ const allBooks = async (
   };
 };
 
+const categoriesBooks = async (id: string) => {
+  const result = await prisma.book.findMany({
+    where: {
+      categoryId: id,
+    },
+  });
+
+  return result;
+};
+
 const singleBooks = async (id: string) => {
   const result = await prisma.book.findUnique({
     where: {
@@ -120,6 +130,7 @@ const deleteBooks = async (id: string) => {
 export const BooksServices = {
   createBooks,
   allBooks,
+  categoriesBooks,
   singleBooks,
   updateBooks,
   deleteBooks,

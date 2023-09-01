@@ -15,6 +15,7 @@ router.post(
 );
 
 router.get('/', BooksController.allBooks);
+router.get('/:id/category', BooksController.categoriesBooks);
 router.get('/:id', BooksController.singleBooks);
 router.patch(
   '/:id',
