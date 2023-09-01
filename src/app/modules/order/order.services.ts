@@ -1,5 +1,6 @@
 import { OrderedBook } from '@prisma/client';
 import { prisma } from '../../../shared/prisma';
+import { JwtPayload } from 'jsonwebtoken';
 
 const createOrder = async (payload: OrderedBook[], id: string) => {
   const order = await prisma.order.create({
@@ -44,8 +45,25 @@ const specificOrders = async (id: string) => {
   return result;
 };
 
+const singleOrder = async (user: JwtPayload, id: string) => {
+  if (user.role === 'customer') {
+    const result = await prisma.order.findUnique({
+      where: {
+        userId: user.id,
+        id,
+      },
+    });
+    return result;
+  }
+  const result = await prisma.order.findUnique({
+    where: { id },
+  });
+  return result;
+};
+
 export const OrderService = {
   createOrder,
   allOrders,
   specificOrders,
+  singleOrder,
 };

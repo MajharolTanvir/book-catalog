@@ -85,8 +85,36 @@ const specificOrders = catchAsync(async (req: Request, res: Response) => {
   }
 });
 
+
+const singleOrder = catchAsync(async (req: Request, res: Response) => {
+  const token: string | undefined = req.headers.authorization;
+
+  try {
+    if (!token) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'Token not provided');
+    }
+
+    const verifiedUser = jwtHelpers.verifyToken(
+      token as string,
+      config.jwt.secret as Secret,
+    );
+
+    const result = await OrderService.singleOrder(verifiedUser, req.params.id);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Order retrieved successfully',
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export const OrderController = {
   createOrder,
   allOrder,
   specificOrders,
+  singleOrder,
 };
