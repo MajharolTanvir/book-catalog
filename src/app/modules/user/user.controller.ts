@@ -1,23 +1,19 @@
-import { Request, Response } from "express";
-import catchAsync from "../../../shared/catchAsync";
-import { UserService } from "./user.services";
-import sendResponse from "../../../shared/sendResponse";
-import httpStatus from "http-status";
+import { Request, Response } from 'express';
+import catchAsync from '../../../shared/catchAsync';
+import { UserService } from './user.services';
+import sendResponse from '../../../shared/sendResponse';
+import httpStatus from 'http-status';
 
+const createUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.createUser(req.body);
 
-
-const createUser = catchAsync(
-    async (req: Request, res: Response) => {
-        const result = await UserService.createUser(req.body)
-
-        sendResponse(res, {
-            statusCode: httpStatus.OK,
-            success: true,
-            message: "User created successful",
-            data: result
-        })
-    }
-)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User created successful',
+    data: result,
+  });
+});
 
 const loginAuth = catchAsync(async (req: Request, res: Response) => {
   const result = await UserService.loginAuth(req.body);
@@ -30,7 +26,6 @@ const loginAuth = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
 const allUser = catchAsync(async (req: Request, res: Response) => {
   const result = await UserService.allUser();
 
@@ -41,8 +36,6 @@ const allUser = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
-
 
 const singleUser = catchAsync(async (req: Request, res: Response) => {
   const result = await UserService.singleUser(req.params.id);
@@ -55,7 +48,6 @@ const singleUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
 const updateUser = catchAsync(async (req: Request, res: Response) => {
   const result = await UserService.updateUser(req.params.id, req.body);
 
@@ -67,7 +59,6 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
 const deleteUser = catchAsync(async (req: Request, res: Response) => {
   const result = await UserService.deleteUser(req.params.id);
 
@@ -78,6 +69,7 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 
 
 export const UserController = {
