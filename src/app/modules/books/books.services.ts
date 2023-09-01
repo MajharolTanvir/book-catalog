@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Book } from '@prisma/client';
+import { Book, Prisma } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { prisma } from '../../../shared/prisma';
@@ -24,11 +24,31 @@ const allBooks = async (
   filters: IBooksFilterRequest,
   options: IPaginationOptions,
 ) => {
-  const { searchTerm, ...filtersData } = filters;
+  const { searchTerm, minPrice, maxPrice, ...filtersData } = filters;
   const { page, limit, skip } = paginationHelpers.calculatePagination(options);
-  console.log(searchTerm);
+
 
   const andConditions = [];
+
+  // Convert minPrice and maxPrice to numbers
+  const parsedMinPrice = minPrice ? parseFloat(minPrice) : undefined;
+  const parsedMaxPrice = maxPrice ? parseFloat(maxPrice) : undefined;
+
+  if (parsedMinPrice !== undefined) {
+    andConditions.push({
+      price: {
+        gte: parsedMinPrice,
+      },
+    });
+  }
+
+  if (parsedMaxPrice !== undefined) {
+    andConditions.push({
+      price: {
+        lte: parsedMaxPrice,
+      },
+    });
+  }
 
   if (searchTerm) {
     andConditions.push({
@@ -61,7 +81,11 @@ const allBooks = async (
     });
   }
 
+  const whereConditions: Prisma.BookWhereInput =
+    andConditions.length > 0 ? { AND: andConditions } : {};
+
   const result = await prisma.book.findMany({
+    where: whereConditions,
     skip,
     take: limit,
     orderBy:
@@ -73,11 +97,14 @@ const allBooks = async (
   });
 
   const total = await prisma.book.count();
+  const totalPage = Math.ceil(total / limit)
+
   return {
     meta: {
       total,
       page,
       limit,
+      totalPage,
     },
     data: result,
   };

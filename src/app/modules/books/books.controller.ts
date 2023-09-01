@@ -27,7 +27,8 @@ const allBooks = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Books retrieved successful',
-    data: result,
+    meta: result.meta,
+    data: result.data,
   });
 });
 
