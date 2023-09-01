@@ -5,7 +5,9 @@ import validateRequest from '../../middlewares/validateRequest';
 import { CategoriesController } from './category.controller';
 import { CategoriesValidation } from './category.validation';
 
+
 router.get('/', CategoriesController.allCategories);
+router.get('/:id', CategoriesController.singleCategories);
 
 router.post(
   '/create-category',
@@ -13,5 +15,7 @@ router.post(
   validateRequest(CategoriesValidation.createCategories),
   CategoriesController.createCategories,
 );
+
+
 
 export const CategoriesRouter = router;
