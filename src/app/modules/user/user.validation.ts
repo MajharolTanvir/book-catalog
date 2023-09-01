@@ -1,8 +1,5 @@
-import { z } from "zod";
-import { UserRole } from "./user.constant";
-
-
-
+import { z } from 'zod';
+import { UserRole } from './user.constant';
 
 const createUser = z.object({
   body: z.object({
@@ -30,8 +27,6 @@ const createUser = z.object({
   }),
 });
 
-
-
 const updateUser = z.object({
   body: z.object({
     name: z.string().optional(),
@@ -42,8 +37,15 @@ const updateUser = z.object({
   }),
 });
 
+const loginAuth = z.object({
+  body: z.object({
+    email: z.string().optional(),
+    password: z.string().optional(),
+  }),
+});
 
 export const UserValidation = {
-    createUser,
-    updateUser
-}
+  createUser,
+  updateUser,
+  loginAuth,
+};

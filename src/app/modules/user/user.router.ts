@@ -12,6 +12,12 @@ router.post(
   UserController.createUser,
 );
 
+router.post(
+  '/signin',
+  validateRequest(UserValidation.loginAuth),
+  UserController.loginAuth,
+);
+
 router.get('/', auth(ENUM_USER_ROLE.admin), UserController.allUser);
 router.get('/:id', auth(ENUM_USER_ROLE.admin), UserController.singleUser);
 router.patch(
