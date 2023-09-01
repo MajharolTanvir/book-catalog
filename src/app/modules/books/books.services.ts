@@ -30,7 +30,6 @@ const allBooks = async (
 
   const andConditions = [];
 
-    
   if (searchTerm) {
     andConditions.push({
       OR: booksSearchableFields.map(field => ({
@@ -84,7 +83,30 @@ const allBooks = async (
   };
 };
 
+const singleBooks = async (id: string) => {
+  const result = await prisma.book.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  return result;
+};
+
+const updateBooks = async (id: string, payload: Partial<Book>) => {
+  const result = await prisma.book.update({
+    where: {
+      id,
+    },
+    data: payload
+  });
+
+  return result;
+};
+
 export const BooksServices = {
   createBooks,
   allBooks,
+  singleBooks,
+  updateBooks,
 };
