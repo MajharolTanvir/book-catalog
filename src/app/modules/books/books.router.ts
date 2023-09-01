@@ -1,8 +1,9 @@
-import { router } from "../../../shared/sharedRouter";
-import validateRequest from "../../middlewares/validateRequest";
-import { BooksController } from "./books.controller";
-import { BooksValidation } from "./books.validation";
+import express from 'express';
+import validateRequest from '../../middlewares/validateRequest';
+import { BooksController } from './books.controller';
+import { BooksValidation } from './books.validation';
 
+const router = express.Router();
 
 router.post(
   '/create-book',
@@ -10,5 +11,6 @@ router.post(
   BooksController.createBooks,
 );
 
+router.get('/', BooksController.allBooks);
 
-export const BooksRouter = router
+export const BooksRouter = router;

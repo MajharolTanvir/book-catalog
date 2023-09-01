@@ -3,6 +3,9 @@ import catchAsync from '../../../shared/catchAsync';
 import { BooksServices } from './books.services';
 import sendResponse from '../../../shared/sendResponse';
 import httpStatus from 'http-status';
+import pick from '../../../shared/pick';
+import { paginationFields } from '../../../constants/pagination';
+import { booksFilterableFields } from './books.constant';
 
 const createBooks = catchAsync(async (req: Request, res: Response) => {
   const result = await BooksServices.createBooks(req.body);
@@ -15,6 +18,20 @@ const createBooks = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const allBooks = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, booksFilterableFields);
+  const options = pick(req.query, paginationFields);
+  const result = await BooksServices.allBooks(filters, options);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Books retrieved successful',
+    data: result,
+  });
+});
+
 export const BooksController = {
   createBooks,
+  allBooks,
 };
