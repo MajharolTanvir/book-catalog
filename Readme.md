@@ -1,8 +1,9 @@
 # Book-catalog
 
 1. Github Private Repository Link - https://github.com/MajharolTanvir/book-catalog
-2. Deployed Live Link - https://gitfgurgbwvjoffrcisj.supabase.co
-3. Application Routes:
+2. Deployed Live Link - https://book-catalog-ten-iota.vercel.app/api/v1/
+3. Database url - postgresql://postgres:NtTmKUq8UlY7areE@db.gitfgurgbwvjoffrcisj.supabase.co:5432/postgres?schema=public
+4. Application Routes:
     - User
         - api/v1/auth/signup (POST)
         - api/v1/users (GET)
