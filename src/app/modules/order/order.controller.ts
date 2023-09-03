@@ -45,19 +45,8 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
   }
 });
 
+
 const allOrder = catchAsync(async (req: Request, res: Response) => {
-  const result = await OrderService.allOrders();
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Order retrieved successfully',
-    data: result,
-  });
-});
-
-
-const specificOrders = catchAsync(async (req: Request, res: Response) => {
   const token: string | undefined = req.headers.authorization;
 
   try {
@@ -70,9 +59,7 @@ const specificOrders = catchAsync(async (req: Request, res: Response) => {
       config.jwt.secret as Secret,
     );
 
-    const result = await OrderService.specificOrders(
-      verifiedUser?.id,
-    );
+    const result = await OrderService.allOrders(verifiedUser);
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -115,6 +102,5 @@ const singleOrder = catchAsync(async (req: Request, res: Response) => {
 export const OrderController = {
   createOrder,
   allOrder,
-  specificOrders,
   singleOrder,
 };

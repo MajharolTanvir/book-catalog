@@ -27,4 +27,3 @@
         - api/v1/orders/create-order (POST)
         - api/v1/orders (GET)
         - api/v1/orders/:orderId (GET)
-        - api/v1/orders/specific (GET)

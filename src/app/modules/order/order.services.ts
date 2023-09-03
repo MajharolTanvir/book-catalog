@@ -1,27 +1,31 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { OrderedBook } from '@prisma/client';
-import { prisma } from '../../../shared/prisma';
 import { JwtPayload } from 'jsonwebtoken';
+import { prisma } from '../../../shared/prisma';
 
 const createOrder = async (payload: OrderedBook[], id: string) => {
-  const order = await prisma.order.create({
-    data: {
-      userId: id,
-    },
-  });
-
-  for (let i = 0; i < payload.length; i++) {
-    await prisma.orderedBook.create({
+  const orderCreate: any = await prisma.$transaction(async orderTransaction => {
+    const order = await orderTransaction.order.create({
       data: {
-        orderId: order.id,
-        bookId: payload[i].bookId,
-        quantity: payload[i].quantity,
+        userId: id,
       },
     });
-  }
+
+    for (let i = 0; i < payload.length; i++) {
+      await orderTransaction.orderedBook.create({
+        data: {
+          orderId: order.id,
+          bookId: payload[i].bookId,
+          quantity: payload[i].quantity,
+        },
+      });
+    }
+    return order;
+  });
 
   const result = await prisma.order.findMany({
     where: {
-      id: order.id,
+      id: orderCreate.id,
     },
     include: {
       orderedBooks: true,
@@ -31,18 +35,16 @@ const createOrder = async (payload: OrderedBook[], id: string) => {
   return result;
 };
 
-const allOrders = async () => {
-  const result = await prisma.order.findMany({});
-
-  return result;
-};
-
-const specificOrders = async (id: string) => {
-  const result = await prisma.order.findMany({
-    where: { userId: id },
-  });
-
-  return result;
+const allOrders = async (user: JwtPayload) => {
+  if (user.role === 'customer') {
+    const result = await prisma.order.findMany({
+      where: { userId: user.id },
+    });
+    return result;
+  } else {
+    const result = user.role === 'admin' && (await prisma.order.findMany({}));
+    return result;
+  }
 };
 
 const singleOrder = async (user: JwtPayload, id: string) => {
@@ -64,6 +66,5 @@ const singleOrder = async (user: JwtPayload, id: string) => {
 export const OrderService = {
   createOrder,
   allOrders,
-  specificOrders,
   singleOrder,
 };
