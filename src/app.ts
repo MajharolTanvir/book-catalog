@@ -5,6 +5,7 @@ import globalErrorHandler from './app/middlewares/globalErrorHandler';
 
 import router from './app/routes';
 import cookieParser from 'cookie-parser';
+import sendResponse from './shared/sendResponse';
 
 const app: Application = express();
 
@@ -20,6 +21,14 @@ app.use('/api/v1', router);
 
 //global error handler
 app.use(globalErrorHandler);
+
+app.get('/', (req: Request, res: Response) => {
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Connected successfully',
+  });
+});
 
 //handle not found
 app.use((req: Request, res: Response, next: NextFunction) => {
